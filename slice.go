@@ -1,4 +1,4 @@
-package main
+package utils
 
 func ToInterfaceSlice[T any](slice []T) []interface{} {
 	if slice == nil {

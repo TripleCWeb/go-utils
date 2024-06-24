@@ -1,4 +1,4 @@
-package main
+package utils
 
 var (
 	BoolFalse bool = false
