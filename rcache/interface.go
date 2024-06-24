@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/TripleCGame/apis/pkg/utils/json"
+	"github.com/TripleCWeb/go-utils"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -25,7 +25,7 @@ func RcacheWapper[InType, OutType any](rcache RCache, key string, f func(context
 	return func(ctx context.Context, in InType) (out OutType, err error) {
 		funcNames := strings.Split(runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name(), ".")
 		funcName := strings.Split(funcNames[len(funcNames)-1], "-")[0]
-		inValue := json.Interface2String(in)
+		inValue := utils.Interface2String(in)
 		rcacheKey := fmt.Sprintf("%s:%s:%s", key, funcName, inValue)
 
 		// Attempt to retrieve the response from the cache

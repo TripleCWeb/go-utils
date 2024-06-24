@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -13,13 +12,11 @@ const ExpirationSeconds time.Duration = 300 * time.Second
 
 type rcache struct {
 	redis *redis.Client
-	log   *log.Helper
 }
 
-func New(redis *redis.Client, log *log.Helper) RCache {
+func New(redis *redis.Client) RCache {
 	return &rcache{
 		redis: redis,
-		log:   log,
 	}
 }
 

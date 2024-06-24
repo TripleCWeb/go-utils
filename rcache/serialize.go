@@ -1,13 +1,15 @@
 package rcache
 
-import "github.com/TripleCGame/apis/pkg/utils/json"
+import (
+	"github.com/TripleCWeb/go-utils"
+)
 
 func Interface2String(i interface{}) string {
-	return json.Interface2String(i)
+	return utils.Interface2String(i)
 }
 
 func String2Interface(jStr string, i interface{}) {
-	json.String2Interface(jStr, i)
+	utils.String2Interface(jStr, i)
 }
 
 // FieldSerializer 类型
