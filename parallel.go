@@ -17,6 +17,37 @@ func RunParallelTasks(tasks ...func()) {
 	wg.Wait()
 }
 
+func RunParallelTasksEx(tasks ...func() error) error {
+	var (
+		wg     sync.WaitGroup
+		errCh  = make(chan error, len(tasks))
+		result error
+	)
+
+	for _, task := range tasks {
+		wg.Add(1)
+		go func(f func() error) {
+			defer wg.Done()
+			if err := f(); err != nil {
+				errCh <- err
+			}
+		}(task)
+	}
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	for err := range errCh {
+		if err != nil && result == nil {
+			result = err // 只记录第一个错误
+		}
+	}
+
+	return result
+}
+
 func RunParallel[T any](slice []T, taskFunc func(slice []T)) {
 	cpuNum := runtime.NumCPU()
 	numPerTask := len(slice)/cpuNum + 1
