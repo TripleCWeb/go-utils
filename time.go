@@ -62,3 +62,31 @@ func StringToTimestamp(timeStr, format string) (int64, error) {
 
 	return timestamp, nil
 }
+
+// 获取指定日期的前/后N天的开始和结束时间戳
+func NDaysTimestamps(t time.Time, n int) (int64, int64) {
+	targetDay := t.AddDate(0, 0, n)
+
+	// 获取当天的开始时间
+	dayStart := time.Date(targetDay.Year(), targetDay.Month(), targetDay.Day(), 0, 0, 0, 0, targetDay.Location())
+
+	// 获取下一天的开始时间
+	nextDayStart := dayStart.AddDate(0, 0, 1)
+
+	// 获取时间戳
+	return dayStart.Unix(), nextDayStart.Unix() - 1
+}
+
+// 获取指定日期的前/后N月的开始和结束时间戳
+func NMonthsTimestamps(t time.Time, n int) (int64, int64) {
+	targetMonth := t.AddDate(0, n, 0)
+
+	// 获取指定月份的第一天
+	monthStart := time.Date(targetMonth.Year(), targetMonth.Month(), 1, 0, 0, 0, 0, targetMonth.Location())
+
+	// 获取下一个月的第一天
+	nextMonthStart := monthStart.AddDate(0, 1, 0)
+
+	// 获取时间戳
+	return monthStart.Unix(), nextMonthStart.Unix() - 1
+}
