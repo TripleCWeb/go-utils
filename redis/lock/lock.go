@@ -16,12 +16,12 @@ func NewLocker(client *redis.Client) *Locker {
 	return &Locker{client: client}
 }
 
-func (p *Locker) AcquireLock(lockKey string, timeoutSecond int) bool {
+func (p *Locker) AcquireLock(lockKey string, waitTimeoutSecond time.Duration, lockTimeout time.Duration) bool {
 	startTime := time.Now()
-	endTime := startTime.Add(time.Duration(timeoutSecond) * time.Second)
+	endTime := startTime.Add(waitTimeoutSecond)
 
 	for time.Now().Before(endTime) {
-		ok, err := p.client.SetNX(context.Background(), lockKey, "locked", 0).Result()
+		ok, err := p.client.SetNX(context.Background(), lockKey, "locked", lockTimeout).Result()
 		if err != nil {
 			log.Println("Error acquiring lock:", err)
 			return false

@@ -29,7 +29,7 @@ func TestGetLock(t *testing.T) {
 	key := "test_key"
 	timeout := 10
 
-	isLock := l.AcquireLock(key, timeout)
+	isLock := l.AcquireLock(key, time.Duration(timeout)*time.Second, 2*time.Minute)
 	if !isLock {
 		t.Error("Failed to acquire lock")
 	}
@@ -45,12 +45,12 @@ func TestGetLockErr(t *testing.T) {
 		t.Errorf("Error occurred while releasing lock: %v", err)
 	}
 
-	isLock := l.AcquireLock(key, timeout)
+	isLock := l.AcquireLock(key, time.Duration(timeout)*time.Second, 2*time.Minute)
 	if !isLock {
 		t.Error("Failed to acquire lock")
 	}
 
-	isLock = l.AcquireLock(key, timeout)
+	isLock = l.AcquireLock(key, time.Duration(timeout)*time.Second, 2*time.Minute)
 	if isLock {
 		t.Error("Success to acquire lock")
 	}
@@ -85,7 +85,7 @@ func TestLockOperations_MultipleSessions(t *testing.T) {
 
 			l := NewLocker(NewRedis())
 
-			isLock := l.AcquireLock(key, timeout)
+			isLock := l.AcquireLock(key, time.Duration(timeout)*time.Second, 2*time.Minute)
 			if !isLock {
 				t.Errorf("Failed to acquire lock (session %d)", sessionID)
 				return
