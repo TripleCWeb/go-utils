@@ -16,6 +16,15 @@ func NewLocker(client redis.UniversalClient) *Locker {
 	return &Locker{client: client}
 }
 
+func (p *Locker) TryAcquireLock(lockKey string, lockTimeout time.Duration) bool {
+	ok, err := p.client.SetNX(context.Background(), lockKey, "locked", lockTimeout).Result()
+	if err != nil {
+		log.Println("Error acquiring lock:", err)
+		return false
+	}
+	return ok
+}
+
 func (p *Locker) AcquireLock(lockKey string, waitTimeoutSecond time.Duration, lockTimeout time.Duration) bool {
 	startTime := time.Now()
 	endTime := startTime.Add(waitTimeoutSecond)
