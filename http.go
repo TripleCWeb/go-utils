@@ -61,6 +61,11 @@ func (p *httpRequest) Request(url string, method string, request interface{}, re
 		fmt.Println("发送请求失败:", err)
 		return
 	}
+	if resp.StatusCode != http.StatusOK {
+		fmt.Println("请求失败:", resp.StatusCode)
+		err = fmt.Errorf(resp.Status)
+		return
+	}
 	defer resp.Body.Close()
 
 	// 读取响应内容
