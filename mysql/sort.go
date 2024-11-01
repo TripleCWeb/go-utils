@@ -14,8 +14,8 @@ const (
 )
 
 type OrderField struct {
-	Field     string
-	OrderType OrderType
+	Field     string    `json:"Field" form:"Field" `
+	OrderType OrderType `json:"OrderType" form:"OrderType" `
 }
 
 func AddDbOrders(db *gorm.DB, orderFields []OrderField) *gorm.DB {
